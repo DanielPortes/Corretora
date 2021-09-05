@@ -7,15 +7,16 @@ public class Venda extends Transacao
 {
     private double precoUnit;
 
-    public Venda(Empresa empresa, double precoUnit, int quantidadeAcoes)
+    public Venda(Investimento investimento, double precoUnit, int qtd, Carteira carteira)
     {
-        super(empresa, quantidadeAcoes);
+        super(investimento, qtd);
         this.precoUnit = precoUnit;
+        carteira.creditarVenda(investimento, qtd);
     }
 
-    public double valorTotalVenda(int quantidadeAcoes)
+    public double valorTotalVenda()
     {
-        return precoUnit * quantidadeAcoes;
+        return precoUnit * getQtdAcoes();
     }
 
 }

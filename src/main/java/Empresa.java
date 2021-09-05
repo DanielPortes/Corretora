@@ -1,11 +1,9 @@
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-
 public class Empresa implements Investimento
 {
     public String nome;
@@ -18,22 +16,24 @@ public class Empresa implements Investimento
         this.nome = nome;
         this.valorAcao = valorAcao;
         this.lucroDividendo = lucroDividendo;
+        acionistas = new ArrayList<Acionista>();
     }
 
-    public void cadastrarAcionista(Acionista acionista, int qtd)
+    public void cadastrarAcionista(Acionista acionista)
     {
         if (acionista == null)
         {
-            throw new NullPointerException("Acionista deve ser informado");
+            throw new IllegalArgumentException("Acionista deve ser informado");
         }
-        if (!this.acionistas.contains(acionista))
+        if (!verificarExistenciaAcionista(acionista))
         {
             this.acionistas.add(acionista);
         }
-        if (!acionista.verificaExistenciaInvestimento(null))
-        {
-            acionista.comprarInvestimento(this, qtd);
-        }
+    }
+
+    public boolean verificarExistenciaAcionista(Acionista acionista)
+    {
+        return getAcionistas().contains(acionista);
     }
 
 }

@@ -1,32 +1,33 @@
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
-
+@Getter
+@Setter
 public class Cliente implements Pessoa, Acionista
 {
+    private String nome;
+    private double investimento;
+    private boolean status;
+    private Carteira carteira;
+    private Corretora corretora;
 
-    public double investimento;
-    public boolean status;
-    public Carteira carteira;
-    public Corretora corretora;
 
-    public Cliente(String nome, Corretora corretora)
+    public Cliente(String nome, Corretora corretora, Carteira carteira)
     {
-//        super(nome,null);
+        this.nome = nome;
+        this.investimento = 0.0d;
+        this.status = false;
+
         cadastrar(corretora);
+        setCarteira(carteira);
     }
 
     public List getInvestimentos()
     {
         return carteira.getInvestimentos();
     }
-    public boolean retornaExistenciaInvestimento(Investimento investimento)
-    {
-        return carteira.getInvestimentos().contains(investimento);
-    }
-
 
     public String getDescricaoCorretora()
     {
@@ -35,6 +36,8 @@ public class Cliente implements Pessoa, Acionista
 
     public String getDescricaoStatus()
     {
+        this.status = !getInvestimentos().isEmpty(); // atualiza status antes de retornar
+
         if (isStatus())
         {
             return "Ativo";
@@ -44,6 +47,10 @@ public class Cliente implements Pessoa, Acionista
 
     public void cadastrar(Corretora corretora)
     {
+        if (corretora == null)
+        {
+            throw new IllegalArgumentException("Corretora valida deve ser informada");
+        }
         if (this.corretora != corretora)
         {
             if (this.corretora != null)
@@ -72,7 +79,18 @@ public class Cliente implements Pessoa, Acionista
     @Override
     public void comprarInvestimento(Investimento investimento, int qtd)
     {
+        if (investimento == null)
+        {
+            throw new IllegalArgumentException("Investimento valido deve ser informado");
+        }
+
         carteira.comprar(investimento, qtd);
+    }
+
+    @Override
+    public void venderInvestimento(Investimento investimento, int qtd)
+    {
+        carteira.vender(investimento, qtd);
     }
 
     public void setNullCarteira()
@@ -82,6 +100,11 @@ public class Cliente implements Pessoa, Acionista
 
     public void setCarteira(Carteira carteira)
     {
+        if (carteira == null)
+        {
+            throw new IllegalArgumentException("Carteira valida deve ser informada");
+        }
+
         if (this.carteira != carteira)
         {
             if (this.carteira != null)

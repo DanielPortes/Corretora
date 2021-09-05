@@ -4,4 +4,6 @@ public interface Acionista
 
     void comprarInvestimento(Investimento investimento, int qtd);
 
+    void venderInvestimento(Investimento investimento, int qtd);
+
 }

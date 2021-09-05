@@ -7,27 +7,48 @@ class CarteiraTest
     @Test
     void deveRetornarCliente()
     {
-        Cliente cliente = new Cliente("Daniel", new Corretora());
-        Carteira carteira = new CarteiraBolsa();
-        carteira.setCliente(cliente);
+        Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraBolsa());
+        Carteira carteira = cliente.getCarteira();
 
         assertEquals(carteira, cliente.getCarteira());
         assertEquals(cliente,carteira.getCliente());
     }
     @Test
-    void deveRetornarClienteNulo()
+    void deveRetornarClienteNuloCarteiraCripto()
     {
-        Cliente cliente = new Cliente("Daniel", new Corretora());
-        Carteira carteira = new CarteiraCriptomoeda();
-        assertNull(carteira.getCliente());
+        try
+        {
+            Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraCriptomoeda());
+            Carteira carteira = cliente.getCarteira();
+            carteira.setCliente(null);
+            assertNull(carteira.getCliente());
+        } catch (IllegalArgumentException e)
+        {
+            assertEquals("Cliente valido deve ser informado", e.getMessage());
+        }
     }
+    @Test
+    void deveRetornarClienteNuloCarteiraBolsa()
+    {
+        try
+        {
+            Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraBolsa());
+            Carteira carteira = cliente.getCarteira();
+            carteira.setCliente(null);
+            assertNull(carteira.getCliente());
+        } catch (IllegalArgumentException e)
+        {
+            assertEquals("Cliente valido deve ser informado", e.getMessage());
+        }
+    }
+
     @Test
     void deveRetornarExcecaoAtivosCriptoObrigatorios()
     {
         try
         {
-            Cliente cliente = new Cliente("Daniel", new Corretora());
-            Carteira carteira = new CarteiraCriptomoeda();
+            Cliente cliente = new Cliente("Daniel", new Corretora(),new CarteiraCriptomoeda());
+            Carteira carteira = cliente.getCarteira();
             carteira.setInvestimentos(null);
             fail();
         } catch (IllegalArgumentException e)
@@ -41,8 +62,8 @@ class CarteiraTest
     {
         try
         {
-            Cliente cliente = new Cliente("Daniel", new Corretora());
-            Carteira carteira = new CarteiraBolsa();
+            Cliente cliente = new Cliente("Daniel", new Corretora(),  new CarteiraBolsa());
+            Carteira carteira = cliente.getCarteira();
             carteira.setInvestimentos(null);
             fail();
         } catch (IllegalArgumentException e)
@@ -50,6 +71,9 @@ class CarteiraTest
             assertEquals(e.getMessage(), "Ativos obrigatorios");
         }
     }
+
+
+
 
 
 

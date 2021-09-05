@@ -14,26 +14,23 @@ public class Corretora
     public Corretora()
     {
         this.clientes = new ArrayList<Cliente>();
+        this.nome = Parametros.getNomeCorretora();
     }
 
-    public double MontanteInvestido()
+    public double montanteInvestido()
     {
         double montante = 0.0d;
         for (Cliente cliente :
                 clientes)
         {
-            montante += cliente.getInvestimento();
+            montante += cliente.getCarteira().getInvestimento();
         }
         return montante;
     }
 
     public void cadastrarCliente(Cliente cliente)
     {
-        if (clientes == null)
-        {
-            this.clientes.add(cliente);
-        }
-        else if (!this.clientes.contains(cliente))
+        if (!this.clientes.contains(cliente))
         {
             this.clientes.add(cliente);
         }

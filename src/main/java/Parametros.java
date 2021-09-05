@@ -1,12 +1,13 @@
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
-@Data
+@Getter
 public class Parametros
 {
-    private static double cotacaoDolar = 5.13;
-    private static double cotacaoBTC = 50000;
+    private static String nomeCorretora = "CorretorasNames";
+    private static double cotacaoDolar = 5.13d;
+    private static double cotacaoBTC = 50000.0d;
     private static List<Empresa> empresas;
 
     public static double getCotacaoDolar()
@@ -24,4 +25,8 @@ public class Parametros
         return ((Empresa) investimento).getValorAcao();
     }
 
+    public static String getNomeCorretora()
+    {
+        return nomeCorretora;
+    }
 }

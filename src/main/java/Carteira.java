@@ -2,11 +2,9 @@ import java.util.List;
 
 public interface Carteira
 {
-    double calcularLucro();
-
     double comprar(Investimento investimento, int qtd);
 
-    double vender();
+    double vender(Investimento investimento, int qtd);
 
     Cliente getCliente();
 
@@ -19,5 +17,12 @@ public interface Carteira
     List getInvestimentos();
 
     void setInvestimentos(List<Investimento> investimentos);
+
+    void creditarVenda(Investimento investimento, int qtd);
+
+    boolean verificaExistenciaInvestimento(Investimento investimento);
+
+    double getInvestimento();
+
 
 }
