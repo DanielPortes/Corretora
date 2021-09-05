@@ -1,8 +1,13 @@
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 
+
+import java.util.List;
+/*
+MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
+DANIEL FAGUNDES PORTES FERNANDES 201965574C
+*/
 @Getter
 @Setter
 public class Cliente implements Pessoa, Acionista

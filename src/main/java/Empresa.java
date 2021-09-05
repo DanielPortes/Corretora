@@ -1,5 +1,8 @@
 import lombok.Data;
-
+    /*
+    MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
+    DANIEL FAGUNDES PORTES FERNANDES 201965574C
+    */
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,5 +38,8 @@ public class Empresa implements Investimento
     {
         return getAcionistas().contains(acionista);
     }
+
+
+
 
 }

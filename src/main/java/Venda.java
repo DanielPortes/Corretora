@@ -1,6 +1,9 @@
 import lombok.Getter;
 import lombok.Setter;
-
+/*
+MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
+DANIEL FAGUNDES PORTES FERNANDES 201965574C
+*/
 @Getter
 @Setter
 public class Venda extends Transacao

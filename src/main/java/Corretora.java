@@ -4,6 +4,12 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+
+    /*
+    MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
+    DANIEL FAGUNDES PORTES FERNANDES 201965574C
+    */
+
 @Data
 @AllArgsConstructor
 public class Corretora
@@ -48,3 +54,8 @@ public class Corretora
         return this.clientes.contains(cliente);
     }
 }
+
+    /*
+    MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
+    DANIEL FAGUNDES PORTES FERNANDES 201965574C
+    */
