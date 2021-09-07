@@ -32,6 +32,11 @@ public class Empresa implements Investimento
         }
     }
 
+    public double getPreco()
+    {
+        return this.valorAcao;
+    }
+
     public boolean verificarExistenciaAcionista(Acionista acionista)
     {
         return getAcionistas().contains(acionista);

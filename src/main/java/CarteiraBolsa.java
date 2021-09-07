@@ -47,7 +47,7 @@ public class CarteiraBolsa implements Carteira
     @Override
     public double comprar(Investimento investimento, int qtd)
     {
-        Compra compra = new Compra(investimento, Parametros.getCotacaoEmpresa(investimento), qtd, this);
+        Compra compra = new Compra(investimento, investimento.getPreco(), qtd, this);
         ((Empresa) investimento).cadastrarAcionista(this.cliente);
 
         return compra.valorTotalCompra();
@@ -56,7 +56,7 @@ public class CarteiraBolsa implements Carteira
     @Override
     public double vender(Investimento investimento, int qtd)
     {
-        Venda venda = new Venda(investimento, Parametros.getCotacaoEmpresa(investimento), qtd, this);
+        Venda venda = new Venda(investimento, investimento.getPreco(), qtd, this);
         return venda.valorTotalVenda();
     }
 
@@ -93,7 +93,7 @@ public class CarteiraBolsa implements Carteira
         {
             empresas.add(((Empresa) investimento));
         }
-        this.investimento += (Parametros.getCotacaoEmpresa(investimento) * qtd);
+        this.investimento += (investimento.getPreco() * qtd);
     }
 
     public void creditarVenda(Investimento investimento, int qtd)
@@ -102,7 +102,7 @@ public class CarteiraBolsa implements Carteira
         {
             empresas.remove(((Empresa) investimento));
         }
-        this.investimento -= (Parametros.getCotacaoEmpresa(investimento) * qtd);
+        this.investimento -= (investimento.getPreco() * qtd);
     }
 
     @Override

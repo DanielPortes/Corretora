@@ -13,4 +13,7 @@ public class Criptomoeda implements Investimento
         this.nome = "BTC";
         cotacao = Parametros.getCotacaoBTC();
     }
+    public double getPreco(){
+        return this.cotacao;
+    }
 }

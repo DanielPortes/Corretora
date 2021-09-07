@@ -25,11 +25,6 @@ public class Cliente implements Pessoa, Acionista
         this.status = false;
     }
 
-    public List getInvestimentos()
-    {
-        return carteira.getInvestimentos();
-    }
-
     public String getDescricaoCorretora()
     {
         return corretora.getNome();
