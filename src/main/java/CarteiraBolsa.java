@@ -1,5 +1,7 @@
 import lombok.Data;
 import lombok.Getter;
+import Exception.CarteiraNuloException;
+import Exception.CorretoraNuloException;
 import Exception.InvestimentoNuloException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +18,10 @@ public class CarteiraBolsa implements Carteira
     public List<Empresa> empresas;
     public double investimento;
 
-    public CarteiraBolsa()
+    public CarteiraBolsa(String nomeCliente, Corretora corretora)
     {
+        this.cliente = new Cliente(nomeCliente, corretora);
         empresas = new ArrayList<Empresa>();
-    }
-
-    public CarteiraBolsa(Cliente cliente)
-    {
-        this.cliente = cliente;
-        empresas = new ArrayList<Empresa>();
-        this.investimento = 0.0d;
     }
 
     @Override
@@ -39,7 +35,7 @@ public class CarteiraBolsa implements Carteira
     {
         if (investimentos == null)
         {
-            throw new IllegalArgumentException("Investimento valido deve ser informado");
+            throw new InvestimentoNuloException("Investimento valido deve ser informado");
         }
         this.empresas = investimentos;
     }
@@ -58,27 +54,6 @@ public class CarteiraBolsa implements Carteira
     {
         Venda venda = new Venda(investimento, investimento.getPreco(), qtd, this);
         return venda.valorTotalVenda();
-    }
-
-    @Override
-    public void setCliente(Cliente cliente)
-    {
-        if (cliente == null)
-        {
-            throw new IllegalArgumentException("Cliente valido deve ser informado");
-        }
-        if (this.cliente != cliente)
-        {
-            if (this.cliente != null)
-            {
-                this.cliente.setNullCarteira();
-            }
-            this.cliente = cliente;
-            if (this.cliente != null && this.cliente.getCarteira() != this)
-            {
-                this.cliente.setCarteira(this);
-            }
-        }
     }
 
     public void setNullCliente()
@@ -109,6 +84,191 @@ public class CarteiraBolsa implements Carteira
     public boolean verificaExistenciaInvestimento(Investimento investimento)
     {
         return getInvestimentos().contains(investimento);
+    }
+
+    @Override
+    public void setCliente(Pessoa cliente)
+    {
+        if (cliente == null)
+        {
+            throw new IllegalArgumentException("Cliente valido deve ser informado");
+        }
+
+        if (this.cliente != cliente)
+        {
+            if (this.cliente != null)
+            {
+                this.cliente.setNullCarteira();
+            }
+            this.cliente = (Cliente) cliente;
+            if (this.cliente != null && this.cliente.getCarteira() != this)
+            {
+                this.cliente.setCarteira(this);
+            }
+        }
+    }
+
+    public void setCorretora(Corretora corretora)
+    {
+        this.cliente.setCorretora(corretora);
+    }
+
+    public void cancelarCadastro()
+    {
+        this.cliente.corretora = null;
+    }
+
+    public String getDescricaoCorretora()
+    {
+        return cliente.getDescricaoCorretora();
+    }
+    @Override
+    public String getNome()
+    {
+        return cliente.getNome();
+    }
+
+    @Override
+    public Carteira getCarteira()
+    {
+        return cliente.getCarteira();
+    }
+
+    @Override
+    public Corretora getCorretora()
+    {
+        return cliente.getCorretora();
+    }
+
+    public void comprarInvestimento(Investimento investimento,int qtd)
+    {
+        this.cliente.comprarInvestimento(investimento,qtd);
+    }
+
+    public void venderInvestimento(Investimento investimento, int qtd)
+    {
+        this.cliente.venderInvestimento(investimento, qtd);
+    }
+
+    public Carteira auxSetCarteira()
+    {
+        return this;
+    }
+
+    public String getDescricaoStatus()
+    {
+        return this.cliente.getDescricaoStatus();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Data
+    private class Cliente implements Pessoa, Acionista
+    {
+        private String nome;
+        private boolean status;
+        private Carteira carteira;
+        private Corretora corretora;
+
+        public Cliente(String nome, Corretora corretora)
+        {
+            setCarteira(auxSetCarteira());
+            setCorretora(corretora);
+            this.nome = nome;
+            this.status = false;
+        }
+
+
+        public String getDescricaoCorretora()
+        {
+            return corretora.getNome();
+        }
+
+        public String getDescricaoStatus()
+        {
+            this.status = !(this.carteira.getInvestimentos().isEmpty());
+
+            if (isStatus())
+            {
+                return "Ativo";
+            }
+            return "Inativo";
+        }
+
+        public void setCorretora(Corretora corretora)
+        {
+            if (corretora == null)
+            {
+                throw new CorretoraNuloException("Corretora valida deve ser informada");
+            }
+            if (this.corretora != corretora)
+            {
+                if (this.corretora != null)
+                {
+                    this.corretora.cancelarRegistro(carteira);
+                }
+                this.corretora = corretora;
+                if (this.corretora != null)
+                {
+                    this.corretora.cadastrarCliente(carteira);
+                }
+            }
+        }
+
+        public void cancelarCadastro()
+        {
+            this.corretora = null;
+        }
+
+        @Override
+        public boolean verificaExistenciaInvestimento(Investimento investimento)
+        {
+            return carteira.getInvestimentos().contains(investimento);
+        }
+
+        @Override
+        public void comprarInvestimento(Investimento investimento, int qtd)
+        {
+            if (investimento == null)
+            {
+                throw new InvestimentoNuloException("Investimento valido deve ser informado");
+            }
+
+            carteira.comprar(investimento, qtd);
+        }
+
+        @Override
+        public void venderInvestimento(Investimento investimento, int qtd)
+        {
+            carteira.vender(investimento, qtd);
+        }
+
+        public void setNullCarteira()
+        {
+            this.carteira = null;
+        }
+
+        public void setCarteira(Carteira carteira)
+        {
+            if (carteira == null)
+            {
+                throw new CarteiraNuloException("Carteira valida deve ser informada");
+            }
+
+            if (this.carteira != carteira)
+            {
+                if (this.carteira != null)
+                {
+                    this.carteira.setNullCliente();
+                }
+                this.carteira = carteira;
+                if (this.carteira != null && this.carteira.getCliente() != this)
+                {
+                    this.carteira.setCliente(this);
+                }
+            }
+        }
+
     }
 
 }

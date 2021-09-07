@@ -5,39 +5,55 @@ import static org.junit.jupiter.api.Assertions.*;
 class CorretoraTest
 {
     @Test
+    void deveCriarCliente()
+    {
+        Corretora corretora = new Corretora();
+        Carteira carteira = new CarteiraCriptomoeda("Daniel", corretora);
+        assertEquals("InvesteFacil", carteira.getDescricaoCorretora());
+        assertEquals("Daniel", carteira.getNome());
+        assertEquals(carteira, carteira.getCarteira());
+        assertEquals(true, corretora.verificaExistenciaCarteira(carteira));
+    }
+
+
+
+
+    @Test
     void deveAdicionarCliente()
     {
         Corretora corretora = new Corretora();
-
-        Cliente cliente = new Cliente("Daniel",corretora, new CarteiraCriptomoeda());
-        corretora.cadastrarCliente(cliente);
-        assertEquals(corretora, cliente.getCorretora());
-        assertEquals(true, corretora.verificaExistenciaCliente(cliente));
+        Carteira carteira = new CarteiraCriptomoeda("Daniel", corretora);
+//        Cliente cliente = new Cliente("Daniel",corretora, new CarteiraCriptomoeda());
+//        corretora.cadastrarCliente(cliente);
+        assertEquals(corretora, carteira.getCorretora());
+        assertEquals(true, corretora.verificaExistenciaCarteira(carteira));
     }
+
+
     @Test
     void deveAdicionarCliente2()
     {
         Corretora corretora = new Corretora();
 
-        Cliente cliente = new Cliente("Daniel",corretora, new CarteiraCriptomoeda());
-        Cliente cliente2 = new Cliente("Joao",corretora, new CarteiraCriptomoeda());
-        corretora.cadastrarCliente(cliente);
+        Carteira carteira = new CarteiraCriptomoeda("Daniel", corretora);
+        Carteira carteira2 = new CarteiraCriptomoeda("Joao", corretora);
 
-        assertEquals(corretora, cliente.getCorretora());
-        assertEquals(true, corretora.verificaExistenciaCliente(cliente));
-        assertEquals(true, corretora.verificaExistenciaCliente(cliente2));
+        assertEquals(corretora, carteira.getCorretora());
+        assertEquals(corretora, carteira2.getCorretora());
+        assertEquals(true, corretora.verificaExistenciaCarteira(carteira));
+        assertEquals(true, corretora.verificaExistenciaCarteira(carteira2));
     }
-
+//
     @Test
     void deveRemoverCliente()
     {
         Corretora corretora = new Corretora();
-        Cliente cliente = new Cliente("Daniel",corretora, new CarteiraCriptomoeda());
-        corretora.cadastrarCliente(cliente);
+        Corretora corretora2 = new Corretora();
+        Carteira carteira = new CarteiraCriptomoeda("Daniel", corretora);
 
-        corretora.cancelarRegistro(cliente);
-        assertEquals(false, corretora.verificaExistenciaCliente(cliente));
-        assertNull(cliente.getCorretora());
+        corretora.cancelarRegistro(carteira);
+        assertEquals(false, corretora.verificaExistenciaCarteira(carteira));
+        assertNull(carteira.getCorretora());
     }
 
     @Test
@@ -45,29 +61,28 @@ class CorretoraTest
     {
         Corretora corretora = new Corretora();
 
-        Cliente cliente = new Cliente("Daniel",corretora, new CarteiraCriptomoeda());
-        Cliente cliente2 = new Cliente("Joao",corretora, new CarteiraCriptomoeda());
-        corretora.cadastrarCliente(cliente);
-        corretora.cadastrarCliente(cliente2);
+        Carteira carteira = new CarteiraCriptomoeda("Daniel", corretora);
+        Carteira carteira2 = new CarteiraCriptomoeda("Daniel", corretora);
 
-        corretora.cancelarRegistro(cliente);
-        corretora.cancelarRegistro(cliente2);
-        assertEquals(null, cliente.getCorretora());
-        assertEquals(null, cliente2.getCorretora());
-        assertEquals(false, corretora.verificaExistenciaCliente(cliente));
-        assertEquals(false, corretora.verificaExistenciaCliente(cliente2));
+
+        corretora.cancelarRegistro(carteira);
+        corretora.cancelarRegistro(carteira2);
+        assertEquals(null, carteira.getCorretora());
+        assertEquals(null, carteira2.getCorretora());
+        assertEquals(false, corretora.verificaExistenciaCarteira(carteira));
+        assertEquals(false, corretora.verificaExistenciaCarteira(carteira2));
     }
 
     @Test
     void deveRetornarMontanteInvestidoDiferenteZero(){
-        Carteira carteira = new CarteiraBolsa();
         Corretora corretora = new Corretora();
-        Cliente cliente = new Cliente("Daniel", corretora, carteira);
-        Empresa empresa = new Empresa("Bradesco", 15.0d, 1.0d);
+        Carteira carteira = new CarteiraCriptomoeda("Daniel", corretora);
 
-        cliente.comprarInvestimento(empresa, 1);
+        Criptomoeda criptomoeda = new Criptomoeda("btc");
 
-        assertEquals(15,corretora.montanteInvestido());
+        carteira.comprarInvestimento(criptomoeda, 1);
+
+        assertEquals(50000.0d,corretora.montanteInvestido());
     }
 
     @Test

@@ -11,11 +11,10 @@ class CarteiraTest
     @Test
     void deveRetornarCliente()
     {
-        Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraBolsa());
-        Carteira carteira = cliente.getCarteira();
+        Carteira carteira = new CarteiraCriptomoeda("Daniel", new Corretora());
 
-        assertEquals(carteira, cliente.getCarteira());
-        assertEquals(cliente,carteira.getCliente());
+        assertEquals(carteira, carteira.getCarteira());
+        assertEquals("Daniel",carteira.getNome());
     }
 
     @Test
@@ -23,10 +22,10 @@ class CarteiraTest
     {
         try
         {
-            Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraCriptomoeda());
-            Carteira carteira = cliente.getCarteira();
+            Carteira carteira = new CarteiraCriptomoeda("Daniel", new Corretora());
             carteira.setCliente(null);
-            assertNull(carteira.getCliente());
+            carteira.getCliente();
+            fail();
         } catch (IllegalArgumentException e)
         {
             assertEquals("Cliente valido deve ser informado", e.getMessage());
@@ -37,10 +36,10 @@ class CarteiraTest
     {
         try
         {
-            Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraBolsa());
-            Carteira carteira = cliente.getCarteira();
+            Carteira carteira = new CarteiraCriptomoeda("Daniel", new Corretora());
             carteira.setCliente(null);
-            assertNull(carteira.getCliente());
+            carteira.getCliente();
+            fail();
         } catch (IllegalArgumentException e)
         {
             assertEquals("Cliente valido deve ser informado", e.getMessage());
@@ -52,8 +51,7 @@ class CarteiraTest
     {
         try
         {
-            Cliente cliente = new Cliente("Daniel", new Corretora(),new CarteiraCriptomoeda());
-            Carteira carteira = cliente.getCarteira();
+            Carteira carteira = new CarteiraCriptomoeda("Daniel", new Corretora());
             carteira.setInvestimentos(null);
             fail();
         } catch (InvestimentoNuloException e)
@@ -67,21 +65,13 @@ class CarteiraTest
     {
         try
         {
-            Carteira carteira = new CarteiraCriptomoeda("Daniel", new Corretora());
+            Carteira carteira = new CarteiraBolsa("Daniel", new Corretora());
             carteira.setInvestimentos(null);
-
             fail();
         } catch (InvestimentoNuloException e)
         {
             assertEquals(e.getMessage(), "Investimento valido deve ser informado");
         }
     }
-
-
-
-
-
-
-
 
 }

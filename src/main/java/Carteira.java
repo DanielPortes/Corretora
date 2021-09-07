@@ -1,4 +1,5 @@
 import java.util.List;
+
 /*
 MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
 DANIEL FAGUNDES PORTES FERNANDES 201965574C
@@ -9,9 +10,9 @@ public interface Carteira
 
     double vender(Investimento investimento, int qtd);
 
-    Cliente getCliente();
+    Pessoa getCliente();
 
-    void setCliente(Cliente cliente);
+    void setCliente(Pessoa cliente);
 
     void setNullCliente();
 
@@ -27,5 +28,21 @@ public interface Carteira
 
     double getInvestimento();
 
+    void setCorretora(Corretora corretora);
 
+    void cancelarCadastro();
+
+    String getDescricaoCorretora();
+
+    String getNome();
+
+    Carteira getCarteira();
+
+    Corretora getCorretora();
+
+    void comprarInvestimento(Investimento investimento, int qtd);
+
+    void venderInvestimento(Investimento investimento, int qtd);
+
+    String getDescricaoStatus();
 }

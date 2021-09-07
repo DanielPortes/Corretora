@@ -1,3 +1,4 @@
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,43 +14,46 @@ import java.util.List;
 public class Corretora
 {
     private String nome;
-    private List<Cliente> clientes;
+    private List<Carteira> carteiras;
 
     public Corretora()
     {
-        this.clientes = new ArrayList<Cliente>();
+        this.carteiras = new ArrayList<Carteira>();
         this.nome = Parametros.getNomeCorretora();
     }
 
     public double montanteInvestido()
     {
         double montante = 0.0d;
-        for (Cliente cliente :
-                clientes)
+        for (Carteira carteira :
+                carteiras)
         {
-            montante += cliente.getCarteira().getInvestimento();
+            montante += carteira.getInvestimento();
         }
         return montante;
     }
 
-    public void cadastrarCliente(Cliente cliente)
+    public void cadastrarCliente(Carteira carteira)
     {
-        if (!this.clientes.contains(cliente))
+        if (!this.carteiras.contains(carteira))
         {
-            this.clientes.add(cliente);
+            this.carteiras.add(carteira);
         }
-        cliente.setCorretora(this);
+        if (carteira != null)
+        {
+            carteira.setCorretora(this);
+        }
     }
 
-    public void cancelarRegistro(Cliente cliente)
+    public void cancelarRegistro(Carteira carteira)
     {
-        this.clientes.remove(cliente);
-        cliente.cancelarCadastro();
+        this.carteiras.remove(carteira);
+        carteira.cancelarCadastro();
     }
 
-    public boolean verificaExistenciaCliente(Cliente cliente)
+    public boolean verificaExistenciaCarteira(Carteira carteira)
     {
-        return this.clientes.contains(cliente);
+        return this.carteiras.contains(carteira);
     }
 }
 
