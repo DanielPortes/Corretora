@@ -1,9 +1,9 @@
-
 import lombok.Data;
 import lombok.Getter;
-
+import Exception.InvestimentoNuloException;
 import java.util.ArrayList;
 import java.util.List;
+
 /*
 MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
 DANIEL FAGUNDES PORTES FERNANDES 201965574C
@@ -15,6 +15,7 @@ public class CarteiraBolsa implements Carteira
     public Cliente cliente;
     public List<Empresa> empresas;
     public double investimento;
+
     public CarteiraBolsa()
     {
         empresas = new ArrayList<Empresa>();
@@ -31,6 +32,16 @@ public class CarteiraBolsa implements Carteira
     public List getInvestimentos()
     {
         return empresas;
+    }
+
+    @Override
+    public void setInvestimentos(List investimentos)
+    {
+        if (investimentos == null)
+        {
+            throw new IllegalArgumentException("Investimento valido deve ser informado");
+        }
+        this.empresas = investimentos;
     }
 
     @Override
@@ -76,16 +87,6 @@ public class CarteiraBolsa implements Carteira
     }
 
     @Override
-    public void setInvestimentos(List investimentos)
-    {
-        if (investimentos == null)
-        {
-            throw new IllegalArgumentException("Ativos obrigatorios");
-        }
-        this.empresas = investimentos;
-    }
-
-    @Override
     public void creditarCompra(Investimento investimento, int qtd)
     {
         if (!empresas.contains((Empresa) investimento))
@@ -94,7 +95,6 @@ public class CarteiraBolsa implements Carteira
         }
         this.investimento += (Parametros.getCotacaoEmpresa(investimento) * qtd);
     }
-
 
     public void creditarVenda(Investimento investimento, int qtd)
     {
@@ -110,6 +110,5 @@ public class CarteiraBolsa implements Carteira
     {
         return getInvestimentos().contains(investimento);
     }
-
 
 }

@@ -5,9 +5,9 @@ import java.util.List;
 @Getter
 public class Parametros
 {
-    private static String nomeCorretora = "CorretorasNames";
-    private static double cotacaoDolar = 5.13d;
-    private static double cotacaoBTC = 50000.0d;
+    private static final String nomeCorretora = "InvesteFacil";
+    private static final double cotacaoDolar = 5.13d;
+    private static final double cotacaoBTC = 50000.0d;
     private static List<Empresa> empresas;
 
     public static double getCotacaoDolar()

@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Test;
+import Exception.InvestimentoNuloException;
 
 import static org.junit.jupiter.api.Assertions.*;
 /*
@@ -16,6 +17,7 @@ class CarteiraTest
         assertEquals(carteira, cliente.getCarteira());
         assertEquals(cliente,carteira.getCliente());
     }
+
     @Test
     void deveRetornarClienteNuloCarteiraCripto()
     {
@@ -54,9 +56,9 @@ class CarteiraTest
             Carteira carteira = cliente.getCarteira();
             carteira.setInvestimentos(null);
             fail();
-        } catch (IllegalArgumentException e)
+        } catch (InvestimentoNuloException e)
         {
-            assertEquals(e.getMessage(), "Ativos obrigatorios");
+            assertEquals(e.getMessage(), "Investimento valido deve ser informado");
         }
     }
 
@@ -65,13 +67,13 @@ class CarteiraTest
     {
         try
         {
-            Cliente cliente = new Cliente("Daniel", new Corretora(),  new CarteiraBolsa());
-            Carteira carteira = cliente.getCarteira();
+            Carteira carteira = new CarteiraCriptomoeda("Daniel", new Corretora());
             carteira.setInvestimentos(null);
+
             fail();
-        } catch (IllegalArgumentException e)
+        } catch (InvestimentoNuloException e)
         {
-            assertEquals(e.getMessage(), "Ativos obrigatorios");
+            assertEquals(e.getMessage(), "Investimento valido deve ser informado");
         }
     }
 

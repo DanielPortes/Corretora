@@ -1,32 +1,28 @@
-import lombok.Getter;
-import lombok.Setter;
-
-
+import Exception.CarteiraNuloException;
+import Exception.CorretoraNuloException;
+import Exception.InvestimentoNuloException;
+import lombok.Data;
 
 import java.util.List;
+
 /*
 MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
 DANIEL FAGUNDES PORTES FERNANDES 201965574C
 */
-@Getter
-@Setter
+@Data
 public class Cliente implements Pessoa, Acionista
 {
     private String nome;
-    private double investimento;
     private boolean status;
     private Carteira carteira;
     private Corretora corretora;
 
-
     public Cliente(String nome, Corretora corretora, Carteira carteira)
     {
-        this.nome = nome;
-        this.investimento = 0.0d;
-        this.status = false;
-
-        cadastrar(corretora);
+        setCorretora(corretora);
         setCarteira(carteira);
+        this.nome = nome;
+        this.status = false;
     }
 
     public List getInvestimentos()
@@ -41,7 +37,7 @@ public class Cliente implements Pessoa, Acionista
 
     public String getDescricaoStatus()
     {
-        this.status = !getInvestimentos().isEmpty(); // atualiza status antes de retornar
+        this.status = !(this.carteira.getInvestimentos().isEmpty());
 
         if (isStatus())
         {
@@ -50,11 +46,11 @@ public class Cliente implements Pessoa, Acionista
         return "Inativo";
     }
 
-    public void cadastrar(Corretora corretora)
+    public void setCorretora(Corretora corretora)
     {
         if (corretora == null)
         {
-            throw new IllegalArgumentException("Corretora valida deve ser informada");
+            throw new CorretoraNuloException("Corretora valida deve ser informada");
         }
         if (this.corretora != corretora)
         {
@@ -86,7 +82,7 @@ public class Cliente implements Pessoa, Acionista
     {
         if (investimento == null)
         {
-            throw new IllegalArgumentException("Investimento valido deve ser informado");
+            throw new InvestimentoNuloException("Investimento valido deve ser informado");
         }
 
         carteira.comprar(investimento, qtd);
@@ -107,7 +103,7 @@ public class Cliente implements Pessoa, Acionista
     {
         if (carteira == null)
         {
-            throw new IllegalArgumentException("Carteira valida deve ser informada");
+            throw new CarteiraNuloException("Carteira valida deve ser informada");
         }
 
         if (this.carteira != carteira)

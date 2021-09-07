@@ -40,7 +40,7 @@ public class Corretora
         {
             this.clientes.add(cliente);
         }
-        cliente.cadastrar(this);
+        cliente.setCorretora(this);
     }
 
     public void cancelarRegistro(Cliente cliente)
@@ -53,6 +53,9 @@ public class Corretora
     {
         return this.clientes.contains(cliente);
     }
+
+
+
 }
 
     /*

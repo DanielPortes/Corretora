@@ -1,4 +1,7 @@
 import org.junit.jupiter.api.Test;
+import Exception.CorretoraNuloException;
+import Exception.CarteiraNuloException;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 /*
@@ -12,7 +15,6 @@ class ClienteTest
     {
         Corretora corretora = new Corretora();
         Cliente cliente = new Cliente("Daniel", corretora, new CarteiraCriptomoeda());
-        corretora.setNome("InvesteFacil");
 
         assertEquals("InvesteFacil", cliente.getDescricaoCorretora());
         assertTrue(corretora.verificaExistenciaCliente(cliente));
@@ -44,7 +46,7 @@ class ClienteTest
         {
             Cliente cliente = new Cliente("Daniel", null, new CarteiraCriptomoeda());
             fail();
-        } catch (IllegalArgumentException e)
+        } catch (CorretoraNuloException e)
         {
             assertEquals("Corretora valida deve ser informada", e.getMessage());
         }
@@ -57,7 +59,7 @@ class ClienteTest
         {
             Cliente cliente = new Cliente("Daniel", new Corretora(), null);
             fail();
-        } catch (IllegalArgumentException e)
+        } catch (CarteiraNuloException e)
         {
             assertEquals("Carteira valida deve ser informada", e.getMessage());
         }
@@ -76,26 +78,49 @@ class ClienteTest
     void deveComprarAcaoEmpresa()
     {
         Cliente cliente = new Cliente("Daniel", new Corretora(),new CarteiraBolsa());
-        Carteira carteira = cliente.getCarteira();
         Empresa empresa = new Empresa("Bradesco", 15.0d, 1.0d);
-        cliente.setCarteira(carteira);
 
         cliente.comprarInvestimento(empresa, 1);
         assertEquals(true, cliente.verificaExistenciaInvestimento(empresa));
+        assertEquals(true, empresa.verificarExistenciaAcionista(cliente));
+    }
+    @Test
+    void deveComprarAcaoEmpresa2()
+    {
+        Cliente cliente = new Cliente("Daniel", new Corretora(),new CarteiraBolsa());
+        Empresa empresa = new Empresa("Bradesco", 15.0d, 1.0d);
+        Empresa empresa2 = new Empresa("Bradesco", 15.0d, 1.0d);
+
+
+        cliente.comprarInvestimento(empresa, 1);
+        cliente.comprarInvestimento(empresa2, 1);
+        assertEquals(true, cliente.verificaExistenciaInvestimento(empresa));
+        assertEquals(true, cliente.verificaExistenciaInvestimento(empresa2));
         assertEquals(true, empresa.verificarExistenciaAcionista(cliente));
     }
 
     @Test
     void deveComprarCriptomoeda()
     {
-        CarteiraCriptomoeda carteiraCriptomoeda = new CarteiraCriptomoeda();
-        Cliente cliente = new Cliente("Daniel", new Corretora(), carteiraCriptomoeda);
-        carteiraCriptomoeda.setCliente(cliente);
+        Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraCriptomoeda());
+        Carteira carteira = cliente.getCarteira();
         Criptomoeda criptomoeda = new Criptomoeda();
 
         cliente.comprarInvestimento(criptomoeda, 1);
         assertEquals(true, cliente.verificaExistenciaInvestimento(criptomoeda));
-        assertEquals(true, carteiraCriptomoeda.verificaExistenciaInvestimento(criptomoeda));
+    }
+    @Test
+    void deveComprarCriptomoeda2()
+    {
+        Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraCriptomoeda());
+        Carteira carteira = cliente.getCarteira();
+        Criptomoeda criptomoeda = new Criptomoeda();
+        Criptomoeda criptomoeda2 = new Criptomoeda();
+
+        cliente.comprarInvestimento(criptomoeda, 1);
+        cliente.comprarInvestimento(criptomoeda2, 1);
+        assertEquals(true, cliente.verificaExistenciaInvestimento(criptomoeda));
+        assertEquals(true, cliente.verificaExistenciaInvestimento(criptomoeda2));
     }
 
     @Test
@@ -104,35 +129,54 @@ class ClienteTest
         Carteira carteira = new CarteiraBolsa();
         Cliente cliente = new Cliente("Daniel", new Corretora(), carteira);
         Empresa empresa = new Empresa("Bradesco", 15.0d, 1.0d);
-
         cliente.comprarInvestimento(empresa, 1);
-        assertEquals(true, cliente.verificaExistenciaInvestimento(empresa));
-        assertEquals(true, carteira.verificaExistenciaInvestimento(empresa));
 
         cliente.venderInvestimento(empresa, 1);
         assertEquals(false, cliente.verificaExistenciaInvestimento(empresa));
-        assertEquals(false, carteira.verificaExistenciaInvestimento(empresa));
+    }
+    @Test
+    void deveVenderAcaoEmpresa2()
+    {
+        Carteira carteira = new CarteiraBolsa();
+        Cliente cliente = new Cliente("Daniel", new Corretora(), carteira);
+        Empresa empresa = new Empresa("Bradesco", 15.0d, 1.0d);
+        Empresa empresa2 = new Empresa("Microsoft", 400.0d, 3.0d);
+        cliente.comprarInvestimento(empresa, 1);
+        cliente.comprarInvestimento(empresa2, 1);
+
+        cliente.venderInvestimento(empresa, 1);
+        cliente.venderInvestimento(empresa2, 1);
+        assertEquals(false, cliente.verificaExistenciaInvestimento(empresa));
+        assertEquals(false, cliente.verificaExistenciaInvestimento(empresa2));
     }
 
     @Test
     void deveVenderCriptomoeda()
     {
-        Carteira carteira = new CarteiraCriptomoeda();
-        Cliente cliente = new Cliente("Daniel", new Corretora(), carteira);
-
+        Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraCriptomoeda());
         Criptomoeda criptomoeda = new Criptomoeda();
-
         cliente.comprarInvestimento(criptomoeda, 1);
-        assertEquals(true, cliente.verificaExistenciaInvestimento(criptomoeda));
-        assertEquals(true, carteira.verificaExistenciaInvestimento(criptomoeda));
 
         cliente.venderInvestimento(criptomoeda, 1);
         assertEquals(false, cliente.verificaExistenciaInvestimento(criptomoeda));
-        assertEquals(false, carteira.verificaExistenciaInvestimento(criptomoeda));
+    }
+    @Test
+    void deveVenderCriptomoeda2()
+    {
+        Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraCriptomoeda());
+        Criptomoeda criptomoeda = new Criptomoeda();
+        Criptomoeda criptomoeda2 = new Criptomoeda();
+        cliente.comprarInvestimento(criptomoeda, 1);
+        cliente.comprarInvestimento(criptomoeda2, 1);
+
+        cliente.venderInvestimento(criptomoeda, 1);
+        cliente.venderInvestimento(criptomoeda2, 1);
+        assertEquals(false, cliente.verificaExistenciaInvestimento(criptomoeda));
+        assertEquals(false, cliente.verificaExistenciaInvestimento(criptomoeda2));
     }
 
     @Test
-    void deveRetornarCLienteInativo()
+    void deveRetornarClienteInativo()
     {
         Carteira carteira = new CarteiraCriptomoeda();
         Cliente cliente = new Cliente("Daniel", new Corretora(), carteira);
@@ -140,11 +184,11 @@ class ClienteTest
     }
 
     @Test
-    void deveRetornarCLienteAtivo()
+    void deveRetornarClienteAtivo()
     {
-        Carteira carteira = new CarteiraCriptomoeda();
-        Cliente cliente = new Cliente("Daniel", new Corretora(), carteira);
+        Cliente cliente = new Cliente("Daniel", new Corretora(), new CarteiraCriptomoeda());
         Criptomoeda criptomoeda = new Criptomoeda();
+
         cliente.comprarInvestimento(criptomoeda, 1);
         assertEquals("Ativo", cliente.getDescricaoStatus());
     }

@@ -1,7 +1,8 @@
 import lombok.Data;
-
+import Exception.InvestimentoNuloException;
 import java.util.ArrayList;
 import java.util.List;
+
 /*
 MATHEUS PEDRO ZANCANELLA BARBOZA 202035005
 DANIEL FAGUNDES PORTES FERNANDES 201965574C
@@ -18,19 +19,24 @@ public class CarteiraCriptomoeda implements Carteira
         criptomoedas = new ArrayList<Criptomoeda>();
     }
 
+    public CarteiraCriptomoeda(String nomeCliente, Corretora corretora)
+    {
+        Cliente cliente = new Cliente(nomeCliente, corretora, this);
+        criptomoedas = new ArrayList<Criptomoeda>();
+    }
+
     @Override
     public List getInvestimentos()
     {
         return criptomoedas;
     }
 
-
     @Override
     public void setInvestimentos(List investimentos)
     {
         if (investimentos == null)
         {
-            throw new IllegalArgumentException("Ativos obrigatorios");
+            throw new InvestimentoNuloException("Investimento valido deve ser informado");
         }
         this.criptomoedas = investimentos;
     }
@@ -52,7 +58,8 @@ public class CarteiraCriptomoeda implements Carteira
     @Override
     public void setCliente(Cliente cliente)
     {
-        if(cliente == null){
+        if (cliente == null)
+        {
             throw new IllegalArgumentException("Cliente valido deve ser informado");
         }
 
@@ -92,7 +99,6 @@ public class CarteiraCriptomoeda implements Carteira
         }
         this.investimento -= (Parametros.getCotacaoBTC() * qtd);
     }
-
 
     @Override
     public boolean verificaExistenciaInvestimento(Investimento investimento)
