@@ -2,4 +2,4 @@
 
 Apresentacao: https://www.youtube.com/watch?v=Q88FXMD2UP8
 
-[![UML](https://imgur.com/a/BxrTuxd)](https://imgur.com/a/BxrTuxd)
+[![UML](https://i.imgur.com/rO1lUSq.png)](https://imgur.com/a/BxrTuxd)
